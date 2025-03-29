@@ -11,6 +11,7 @@ services:
       - nagios_etc:/opt/nagios/etc
       - nagios_var:/opt/nagios/var
       - ./process_to_prometheus.sh:/process_to_prometheus.sh
+      - nagios_var/node_exporter:/var/lib/node_exporter
     environment:
       - NAGIOS_TIMEZONE=UTC
     restart: unless-stopped
@@ -53,7 +54,7 @@ services:
     image: prom/node-exporter:latest
     container_name: node_exporter
     volumes:
-       - /home/ubuntu/monitoring-vol/node_exporter:/var/lib/node_exporter
+      - nagios_var/node_exporter:/var/lib/node_exporter
     command:
       - '--collector.textfile.directory=/var/lib/node_exporter'
       - '--collector.textfile'
