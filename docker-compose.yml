@@ -12,8 +12,8 @@ services:
       - nagios_var:/opt/nagios/var
     environment:
       - NAGIOS_TIMEZONE=UTC
-      - NAGIOSADMIN_USER=admin
-      - NAGIOSADMIN_PASS=admin123
+      - NAGIOS_ADMIN_USER=admin
+      - NAGIOS_ADMIN_PASS=admin123
     restart: unless-stopped
     networks:
       - monitoring_net
