@@ -10,7 +10,7 @@ services:
     volumes:
       - nagios_etc:/opt/nagios/etc
       - nagios_var:/opt/nagios/var
-      - .process_to_prometheus.sh:/process_to_prometheus.sh
+      - ./process_to_prometheus.sh:/process_to_prometheus.sh
     environment:
       - NAGIOS_TIMEZONE=UTC
     restart: unless-stopped
