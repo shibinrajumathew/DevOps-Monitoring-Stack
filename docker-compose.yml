@@ -25,6 +25,7 @@ services:
     volumes:
       - prometheus_data:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - .process_to_prometheus.sh:/process_to_prometheus.sh
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -53,7 +54,6 @@ services:
     container_name: node_exporter
     volumes:
        - /home/ubuntu/monitoring-vol/node_exporter:/var/lib/node_exporter
-       - .process_to_prometheus.sh:/process_to_prometheus.sh
     command:
       - '--collector.textfile.directory=/var/lib/node_exporter'
       - '--collector.textfile'
