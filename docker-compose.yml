@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+# nagios install
+  nagios:
+    image: jasonrivers/nagios:latest
+    container_name: nagios
+    ports:
+      - "8080:80"
+    environment:
+      - NAGIOSADMIN_USER=admin
+      - NAGIOSADMIN_PASS=admin123
+    restart: unless-stopped
+# nagios - prometheus bridge
+  nagios-exporter:
+    image: prometheuscommunity/nagios_exporter
+    container_name: nagios-exporter
+    command:
+      - '--nagios.perfdata-directory=/var/log/nagios'
+    ports:
+      - "9113:9113"
+    depends_on:
+      - nagios
+    restart: unless-stopped
+# prometheus install
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - nagios-exporter
+    restart: unless-stopped
+# grafana install 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    restart: unless-stopped
