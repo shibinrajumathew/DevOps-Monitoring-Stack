@@ -51,6 +51,12 @@ services:
   node_exporter:
     image: prom/node-exporter:latest
     container_name: node_exporter
+    volumes:
+       - /home/ubuntu/monitoring-vol/node_exporter:/var/lib/node_exporter
+       - ./nagios/process_to_prometheus.sh:/process_to_prometheus.sh
+    command:
+      - '--collector.textfile.directory=/var/lib/node_exporter'
+      - '--collector.textfile'
     ports:
       - "9100:9100"
     restart: unless-stopped
@@ -60,7 +66,7 @@ services:
 volumes:
   nagios_etc:
     driver: local
-    driver_opts:
+    driver_opts:  
       type: none
       o: bind
       device: /home/ubuntu/monitoring-vol/nagios/etc
