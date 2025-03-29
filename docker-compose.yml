@@ -8,12 +8,10 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - nagios_data:/opt/nagios/etc
+      - nagios_etc:/opt/nagios/etc
       - nagios_var:/opt/nagios/var
     environment:
       - NAGIOS_TIMEZONE=UTC
-      - NAGIOS_ADMIN_USER=admin
-      - NAGIOS_ADMIN_PASS=admin123
     restart: unless-stopped
     networks:
       - monitoring_net
@@ -26,10 +24,9 @@ services:
       - "9090:9090"
     volumes:
       - prometheus_data:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_config:/etc/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
     restart: unless-stopped
     networks:
       - monitoring_net
@@ -44,12 +41,12 @@ services:
       - grafana_data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
     restart: unless-stopped
     networks:
       - monitoring_net
 
-  # Node Exporter (for Prometheus metrics)
+  # Node Exporter
   node_exporter:
     image: prom/node-exporter:latest
     container_name: node_exporter
@@ -60,10 +57,36 @@ services:
       - monitoring_net
 
 volumes:
-  nagios_data:
+  nagios_etc:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ubuntu/monitoring-vol/nagios/etc
   nagios_var:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ubuntu/monitoring-vol/nagios/var
   prometheus_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ubuntu/monitoring-vol/prometheus/data
+  prometheus_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ubuntu/monitoring-vol/prometheus/config
   grafana_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ubuntu/monitoring-vol/grafana/data
 
 networks:
   monitoring_net:
