@@ -24,7 +24,7 @@ services:
       - "9090:9090"
     volumes:
       - prometheus_data:/prometheus
-      - prometheus_config:/etc/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     restart: unless-stopped
@@ -75,12 +75,6 @@ volumes:
       type: none
       o: bind
       device: /home/ubuntu/monitoring-vol/prometheus/data
-  prometheus_config:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/ubuntu/monitoring-vol/prometheus/config
   grafana_data:
     driver: local
     driver_opts:
