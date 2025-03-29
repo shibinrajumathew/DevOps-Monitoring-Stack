@@ -10,6 +10,7 @@ services:
     volumes:
       - nagios_etc:/opt/nagios/etc
       - nagios_var:/opt/nagios/var
+      - .process_to_prometheus.sh:/process_to_prometheus.sh
     environment:
       - NAGIOS_TIMEZONE=UTC
     restart: unless-stopped
@@ -25,7 +26,6 @@ services:
     volumes:
       - prometheus_data:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - .process_to_prometheus.sh:/process_to_prometheus.sh
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
