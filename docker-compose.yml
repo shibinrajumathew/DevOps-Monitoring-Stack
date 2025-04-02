@@ -17,6 +17,21 @@ services:
     restart: unless-stopped
     networks:
       - monitoring_net
+      
+  # Node Exporter
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    volumes:
+      - nagios_metrics:/var/lib/node_exporter
+    command:
+      - '--collector.textfile.directory=/var/lib/node_exporter'
+      - '--collector.textfile'
+    ports:
+      - "9100:9100"
+    restart: unless-stopped
+    networks:
+      - monitoring_net
 
   # Prometheus
   prometheus:
@@ -49,20 +64,7 @@ services:
     networks:
       - monitoring_net
 
-  # Node Exporter
-  node_exporter:
-    image: prom/node-exporter:latest
-    container_name: node_exporter
-    volumes:
-      - nagios_metrics:/var/lib/node_exporter
-    command:
-      - '--collector.textfile.directory=/var/lib/node_exporter'
-      - '--collector.textfile'
-    ports:
-      - "9100:9100"
-    restart: unless-stopped
-    networks:
-      - monitoring_net
+
 
 volumes:
   nagios_etc:
@@ -70,29 +72,29 @@ volumes:
     driver_opts:  
       type: none
       o: bind
-      device: /home/ubuntu/monitoring-vol/nagios/etc
+      device: /home/ubuntu/monitoring/nagios/etc
   nagios_var:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/ubuntu/monitoring-vol/nagios/var
+      device: /home/ubuntu/monitoring/nagios/var
   prometheus_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/ubuntu/monitoring-vol/prometheus/data
+      device: /home/ubuntu/monitoring/prometheus/data
   grafana_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/ubuntu/monitoring-vol/grafana/data
+      device: /home/ubuntu/monitoring/grafana/data
   nagios_metrics:
     driver: local
     driver_opts:
-      device: /home/ubuntu/monitoring-vol/nagios/var/node_exporter
+      device: /home/ubuntu/monitoring/node_exporter
       type: none
       o: bind
 
