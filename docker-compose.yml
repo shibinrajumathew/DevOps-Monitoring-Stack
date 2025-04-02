@@ -10,6 +10,8 @@ services:
     volumes:
       - nagios_etc:/opt/nagios/etc
       - nagios_var:/opt/nagios/var
+      - ./nagios/hosts.cfg:/opt/nagios/etc/objects/hosts.cfg:ro
+      - ./nagios/services.cfg:/opt/nagios/etc/objects/services.cfg:ro
       - ./process_to_prometheus.sh:/process_to_prometheus.sh
       - nagios_metrics:/var/lib/node_exporter
     environment:
