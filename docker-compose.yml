@@ -12,7 +12,6 @@ services:
       - nagios_var:/opt/nagios/var
       - ./process_to_prometheus.sh:/process_to_prometheus.sh
       - nagios_metrics:/var/lib/node_exporter
-    command: /bin/bash /process_to_prometheus.sh &
     environment:
       - NAGIOS_TIMEZONE=UTC
     restart: unless-stopped
