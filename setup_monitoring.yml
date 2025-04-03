@@ -7,7 +7,7 @@
       file:
         path: "{{ item }}"
         state: directory
-        mode: '0755'
+        mode: '0775'
       loop:
         - "/home/ubuntu/monitoring/nagios/etc"
         - "/home/ubuntu/monitoring/nagios/var"
