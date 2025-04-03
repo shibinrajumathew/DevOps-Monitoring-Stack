@@ -8,6 +8,8 @@
         path: "{{ item }}"
         state: directory
         mode: '0775'
+        owner: ubuntu
+        group: ubuntu
       loop:
         - "/home/ubuntu/monitoring/nagios/etc"
         - "/home/ubuntu/monitoring/nagios/var"
