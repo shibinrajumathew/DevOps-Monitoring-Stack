@@ -16,6 +16,23 @@
         - "/home/ubuntu/monitoring/prometheus/data"
         - "/home/ubuntu/monitoring/grafana/data"
         - "/home/ubuntu/monitoring/node_exporter"
+    - name: Ensure docker-compose is installed
+      ansible.builtin.yum:
+        name: docker-compose
+        state: present
+      when: ansible_facts.packages['docker-compose'] is not defined
+
+    - name: Run docker-compose up -d --build
+      ansible.builtin.shell:
+        cmd: docker-compose up -d --build
+        chdir: /path/to/your/docker-compose/directory
+      register: docker_compose_result
+      ignore_errors: yes
+
+    - name: Check if docker-compose ran successfully
+      ansible.builtin.debug:
+        msg: "Docker Compose ran successfully"
+      when: docker_compose_result.rc == 0
 
     - name: Copy all files and folders from nagios-config to /home/ubuntu/monitoring/nagios/etc
       copy:
