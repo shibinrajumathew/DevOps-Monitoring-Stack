@@ -1,5 +1,5 @@
 - name: Setup monitoring directories and copy Nagios configs
-  hosts: nagios_server
+  hosts: localhost
   become: yes
   tasks:
 
