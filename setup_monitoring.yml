@@ -3,19 +3,19 @@
   become: yes
   tasks:
 
-    # - name: Create monitoring directories with parents
-    #   file:
-    #     path: "{{ item }}"
-    #     state: directory
-    #     mode: '0777'
-    #     owner: ubuntu
-    #     group: ubuntu
-    #   loop:
-    #     - "/home/ubuntu/monitoring/nagios/etc"
-    #     - "/home/ubuntu/monitoring/nagios/var"
-    #     - "/home/ubuntu/monitoring/prometheus/data"
-    #     - "/home/ubuntu/monitoring/grafana/data"
-    #     - "/home/ubuntu/monitoring/node_exporter"
+    - name: Create monitoring directories with parents
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0775'
+        owner: ubuntu
+        group: ubuntu
+      loop:
+        - "/home/ubuntu/monitoring/nagios/etc"
+        - "/home/ubuntu/monitoring/nagios/var"
+        - "/home/ubuntu/monitoring/prometheus/data"
+        - "/home/ubuntu/monitoring/grafana/data"
+        - "/home/ubuntu/monitoring/node_exporter"
 
     - name: Copy all files and folders from nagios-config to /home/ubuntu/monitoring/nagios/etc
       copy:
