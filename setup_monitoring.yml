@@ -1,0 +1,24 @@
+- name: Setup monitoring directories and copy Nagios configs
+  hosts: nagios_server
+  become: yes
+  tasks:
+
+    - name: Create monitoring directories with parents
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "/home/ubuntu/monitoring/nagios/etc"
+        - "/home/ubuntu/monitoring/nagios/var"
+        - "/home/ubuntu/monitoring/prometheus/data"
+        - "/home/ubuntu/monitoring/grafana/data"
+        - "/home/ubuntu/monitoring/node_exporter"
+
+    - name: Copy all files and folders from nagios-config to /home/ubuntu/monitoring/nagios/etc
+      copy:
+        src: ./nagios-config/
+        dest: /home/ubuntu/monitoring/nagios/etc/
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
