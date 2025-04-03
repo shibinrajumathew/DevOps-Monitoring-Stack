@@ -7,7 +7,7 @@
       file:
         path: "{{ item }}"
         state: directory
-        mode: '0775'
+        mode: '0777'
         owner: ubuntu
         group: ubuntu
       loop:
@@ -15,12 +15,31 @@
         - "/home/ubuntu/monitoring/nagios/var"
         - "/home/ubuntu/monitoring/prometheus/data"
         - "/home/ubuntu/monitoring/grafana/data"
-        - "/home/ubuntu/monitoring/node_exporter"
+    #     - "/home/ubuntu/monitoring/node_exporter"
 
-    - name: Copy all files and folders from nagios-config to /home/ubuntu/monitoring/nagios/etc
-      copy:
-        src: ./nagios-config/
-        dest: /home/ubuntu/monitoring/nagios/etc/
-        owner: ubuntu
-        group: ubuntu
-        mode: '0644'
+    # - name: Copy all files and folders from nagios-config to /home/ubuntu/monitoring/nagios/etc
+    #   copy:
+    #     src: ./nagios-config/
+    #     dest: /home/ubuntu/monitoring/nagios/etc/
+    #     owner: ubuntu
+    #     group: ubuntu
+    #     mode: '0644'
+    - name: Copy commands directory
+      ansible.builtin.command:
+        cmd: cp -r ./nagios-config/commands/ ./commands
+
+    - name: Copy contacts directory
+      ansible.builtin.command:
+        cmd: cp -r ./nagios-config/contacts/ ./contacts
+
+    - name: Copy hosts directory
+      ansible.builtin.command:
+        cmd: cp -r ./nagios-config/hosts/ ./hosts
+
+    - name: Copy periods directory
+      ansible.builtin.command:
+        cmd: cp -r ./nagios-config/periods/ ./periods
+
+    - name: Copy services directory
+      ansible.builtin.command:
+        cmd: cp -r ./nagios-config/services/ ./services
