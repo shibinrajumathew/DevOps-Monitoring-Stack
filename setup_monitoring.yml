@@ -23,7 +23,7 @@
         dest: /home/ubuntu/monitoring/nagios/etc/
         owner: ubuntu
         group: ubuntu
-        mode: '0644'
+        mode: '0775'
     # - name: Copy commands directory
     #   ansible.builtin.command:
     #     cmd: cp -r ./nagios-config/commands/ ./commands
