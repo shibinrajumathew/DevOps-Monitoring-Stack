@@ -2,17 +2,37 @@
   hosts: localhost
   become: yes
   tasks:
+    - name: Create nagios group
+      ansible.builtin.group:
+        name: nagios
+        state: present
+        
+    - name: Create nagios user and add to nagios group
+      ansible.builtin.user:
+        name: nagios
+        group: nagios
+        shell: /bin/bash
+        create_home: yes
+        state: present
 
-    - name: Create monitoring directories with parents
+    - name: Create nagios directories with parents
       file:
         path: "{{ item }}"
         state: directory
-        # mode: '0775'
-        # owner: ubuntu
-        # group: ubuntu
+        mode: '0775'
+        owner: nagios
+        group: nagios
       loop:
         - "/home/ubuntu/monitoring/nagios/etc"
         - "/home/ubuntu/monitoring/nagios/var"
+    - name: Create other monitoring directories with parents
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0775'
+        # owner: nagios
+        # group: nagios
+      loop:
         - "/home/ubuntu/monitoring/prometheus/data"
         - "/home/ubuntu/monitoring/grafana/data"
         - "/home/ubuntu/monitoring/node_exporter"
