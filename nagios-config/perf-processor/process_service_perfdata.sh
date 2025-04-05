@@ -5,40 +5,51 @@ NAGIOS_SERVICE_PERFDATA="/opt/nagios/var/service-perfdata"
 if [ -f "$NAGIOS_SERVICE_PERFDATA" ]; then
     awk -F'\t' '{
         # Extract fields from the template
-        hostname = "";
-        service = "";
-        perfdata = "";
-        for (i=1; i<=NF; i++) {
-            if ($i ~ /^HOSTNAME::/) split($i, h, "::");
-            if ($i ~ /^SERVICEDESC::/) split($i, s, "::");
-            if ($i ~ /^SERVICEPERFDATA::/) split($i, p, "::");
-        }
-        hostname = h[3];
-        service = s[3];
-        perfdata = p[3];
+        hostname = $3;
+        sub(/^HOSTNAME::/, "", hostname);
+        service = $4;
+        sub(/^SERVICEDESC::/, "", service);
+        servicstate = $9;
+        sub(/^SERVICESTATE::/, "", servicstate);
+
+        perfdata = "$5";
+        sub(/^SERVICEPERFDATA::/, "", perfdata);
+        
         
         # Process performance data
         if (service == "HTTP") {
-            split(perfdata, metrics, ";");
-            for (m in metrics) {
-                if (metrics[m] ~ /=/) {
-                    split(metrics[m], kv, "=");
-                    if (kv[1] ~ /time/) {
-                        print "nagios_http_response_seconds{host=\""hostname"\"} " kv[2]/1000;
-                    }
-                }
-            }
+            # Extract HOSTPERFDATA and break into fields
+            perfdata = $10;
+            sub(/^HOSTPERFDATA::/, "", perfdata);
+
+            # Split on space, because perfdata contains both ";" and space-separated metrics
+            n = split(perfdata, metrics, " ");
+
+            # Extract RTA
+            split(metrics[1], rta_part, "=");
+            rta = rta_part[2];
+            sub(/ms$/, "", rta);
+            rta_sec = rta / 1000;
+            
+            print "nagios_http_response_seconds{host=\""hostname"\"} " rta_sec;
         }
         else if (service == "PING") {
-            split(perfdata, metrics, ";");
-            for (m in metrics) {
-                if (metrics[m] ~ /=/) {
-                    split(metrics[m], kv, "=");
-                    if (kv[1] ~ /rta/) {
-                        print "nagios_ping_rta_seconds{host=\""hostname"\"} " kv[2]/1000;
-                    }
-                }
-            }
+            # Extract HOSTPERFDATA and break into fields
+            perfdata = $10;
+            sub(/^HOSTPERFDATA::/, "", perfdata);
+
+            # Split on space, because perfdata contains both ";" and space-separated metrics
+            n = split(perfdata, metrics, " ");
+
+            # Extract RTA
+            split(metrics[1], rta_part, "=");
+            rta = rta_part[2];
+            sub(/ms$/, "", rta);
+            rta_sec = rta / 1000;
+            
+            print "nagios_ping_response_seconds{host=\""hostname"\"} " rta_sec;
+        }else {
+            print "nagios_http_ssl_response{host=\""hostname"\", servicstate=\""servicstate"\"} ";
         }
     }' "$NAGIOS_SERVICE_PERFDATA" > "$OUTFILE"
 fi
