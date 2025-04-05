@@ -3,19 +3,29 @@
   become: yes
   tasks:
 
-    # - name: Create monitoring directories with parents
-    #   file:
-    #     path: "{{ item }}"
-    #     state: directory
-    #     # mode: '0775'
-    #     # owner: ubuntu
-    #     # group: ubuntu
-    #   loop:
-    #     - "/home/ubuntu/monitoring/nagios/etc"
-    #     - "/home/ubuntu/monitoring/nagios/var"
-    #     - "/home/ubuntu/monitoring/prometheus/data"
-    #     - "/home/ubuntu/monitoring/grafana/data"
-    #     - "/home/ubuntu/monitoring/node_exporter"
+    - name: Create monitoring directories with parents
+      file:
+        path: "{{ item }}"
+        state: directory
+        # mode: '0775'
+        # owner: ubuntu
+        # group: ubuntu
+      loop:
+        - "/home/ubuntu/monitoring/nagios/etc"
+        - "/home/ubuntu/monitoring/nagios/var"
+        - "/home/ubuntu/monitoring/prometheus/data"
+        - "/home/ubuntu/monitoring/grafana/data"
+        - "/home/ubuntu/monitoring/node_exporter"
+
+    - name: Ensure docker-compose is present
+      ansible.builtin.command: docker-compose --version
+      register: compose_check
+      ignore_errors: yes
+
+    - name: Pull and build images, then start containers
+      ansible.builtin.shell: docker-compose up -d --build
+      args:
+        chdir: /home/ubuntu/DevOps-Monitoring-Stack
 
     - name: Copy all files and folders from nagios-config to /home/ubuntu/monitoring/nagios/etc
       copy:
@@ -24,22 +34,3 @@
         # owner: ubuntu
         # group: ubuntu
         # mode: '0775'
-    # - name: Copy commands directory
-    #   ansible.builtin.command:
-    #     cmd: cp -r ./nagios-config/commands/ ./commands
-
-    # - name: Copy contacts directory
-    #   ansible.builtin.command:
-    #     cmd: cp -r ./nagios-config/contacts/ ./contacts
-
-    # - name: Copy hosts directory
-    #   ansible.builtin.command:
-    #     cmd: cp -r ./nagios-config/hosts/ ./hosts
-
-    # - name: Copy periods directory
-    #   ansible.builtin.command:
-    #     cmd: cp -r ./nagios-config/periods/ ./periods
-
-    # - name: Copy services directory
-    #   ansible.builtin.command:
-    #     cmd: cp -r ./nagios-config/services/ ./services
