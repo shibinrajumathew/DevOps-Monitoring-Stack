@@ -29,8 +29,8 @@
       copy:
         src: ./nagios-config/
         dest: /home/ubuntu/monitoring/nagios/etc/
-        # owner: ubuntu
-        # group: ubuntu
-        # mode: '0775'
+        owner: nagios
+        group: nagios
+        mode: '0775'
     - name: Restart only nagios container
       ansible.builtin.shell: docker-compose restart nagios
