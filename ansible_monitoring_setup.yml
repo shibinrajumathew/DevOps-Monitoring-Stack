@@ -25,6 +25,7 @@
       loop:
         - "/home/ubuntu/monitoring/nagios/etc"
         - "/home/ubuntu/monitoring/nagios/var"
+        - "/home/ubuntu/monitoring/node_exporter"
     - name: Create other monitoring directories with parents
       file:
         path: "{{ item }}"
@@ -35,7 +36,6 @@
       loop:
         - "/home/ubuntu/monitoring/prometheus/data"
         - "/home/ubuntu/monitoring/grafana/data"
-        - "/home/ubuntu/monitoring/node_exporter"
 
     - name: Ensure docker-compose is present
       ansible.builtin.command: docker-compose --version
