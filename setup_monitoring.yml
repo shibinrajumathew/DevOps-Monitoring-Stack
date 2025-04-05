@@ -24,8 +24,6 @@
 
     - name: Pull and build images, then start containers
       ansible.builtin.shell: docker-compose up -d --build
-      args:
-        chdir: /home/ubuntu/DevOps-Monitoring-Stack
 
     - name: Copy all files and folders from nagios-config to /home/ubuntu/monitoring/nagios/etc
       copy:
@@ -34,3 +32,5 @@
         # owner: ubuntu
         # group: ubuntu
         # mode: '0775'
+    - name: Restart only nagios container
+      ansible.builtin.shell: docker-compose restart nagios
