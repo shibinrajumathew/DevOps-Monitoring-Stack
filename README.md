@@ -10,4 +10,4 @@ To test ping inside nagios docker
 # docker exec -it nagios /usr/lib/nagios/plugins/check_ping -H vveeo.com -w 100.0,20% -c 500.0,60%
 
 Default nagios username and pass, To Do change after testing
-nagiosadmin / nagios
+nagiosadmin / nagios    
