@@ -30,10 +30,10 @@ if [ -f "$NAGIOS_HOST_PERFDATA" ]; then
         sub(/%$/, "", pl);
 
         # Output
-        
-        print "nagios_host_state{host=\""hostname"\",hoststate=\""hoststate"\"} ";
-        print "nagios_host_latency{host=\""hostname"\",hoststate=\""latency"\"} ";
+        value = (hoststate == "UP") ? 1 : 0;
+        print "nagios_host_state{host=\""hostname"\",hoststate=\""hoststate"\"} " value;
+        print "nagios_host_latency_seconds{host=\""hostname"\"} " latency;
         print "nagios_host_rta_seconds{host=\"" hostname "\"} " rta_sec;
-        print "nagios_host_pl{host=\"" hostname "\"} " pl;
+        print "nagios_host_pl_percent{host=\"" hostname "\"} " pl;
     }' "$NAGIOS_HOST_PERFDATA" > "$OUTFILE"
 fi

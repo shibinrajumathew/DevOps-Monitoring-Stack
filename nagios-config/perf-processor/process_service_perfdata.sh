@@ -49,7 +49,8 @@ if [ -f "$NAGIOS_SERVICE_PERFDATA" ]; then
             
             print "nagios_ping_response_seconds{host=\""hostname"\"} " rta_sec;
         }else {
-            print "nagios_http_ssl_response{host=\""hostname"\", servicstate=\""servicstate"\"} ";
+            value = (servicstate == "OK") ? 1 : 0;
+            print "nagios_http_ssl_response{host=\""hostname"\", servicstate=\""servicstate"\"} " value;
         }
     }' "$NAGIOS_SERVICE_PERFDATA" > "$OUTFILE"
 fi
