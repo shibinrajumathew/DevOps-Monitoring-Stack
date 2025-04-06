@@ -27,13 +27,14 @@ if [ -f "$NAGIOS_HOST_PERFDATA" ]; then
         # Extract PL
         split(metrics[2], pl_part, "=");
         pl = pl_part[2];
-        sub(/%$/, "", pl);
+        split(pl, pl_values, ";");
+        sub(/%$/, "", pl_values[1]);
 
         # Output
         value = (hoststate == "UP") ? 1 : 0;
         print "nagios_host_state{host=\""hostname"\",hoststate=\""hoststate"\"} " value;
         print "nagios_host_latency_seconds{host=\""hostname"\"} " latency;
         print "nagios_host_rta_seconds{host=\"" hostname "\"} " rta_sec;
-        print "nagios_host_pl_percent{host=\"" hostname "\"} " pl;
+        print "nagios_host_pl_percent{host=\"" hostname "\"} " pl_values[1];
     }' "$NAGIOS_HOST_PERFDATA" > "$OUTFILE"
 fi
