@@ -1,0 +1,56 @@
+- name: Setup monitoring directories and copy Nagios configs
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Create nagios group
+      ansible.builtin.group:
+        name: nagios
+        state: present
+        
+    - name: Create nagios user and add to nagios group
+      ansible.builtin.user:
+        name: nagios
+        group: nagios
+        shell: /bin/bash
+        create_home: yes
+        state: present
+
+    - name: Create nagios directories with parents
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0775'
+        owner: nagios
+        group: nagios
+      loop:
+        - "/home/ubuntu/monitoring/nagios/etc"
+        - "/home/ubuntu/monitoring/nagios/var"
+        - "/home/ubuntu/monitoring/node_exporter"
+    - name: Create other monitoring directories with parents
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0775'
+        # owner: nagios
+        # group: nagios
+      loop:
+        - "/home/ubuntu/monitoring/prometheus/data"
+        - "/home/ubuntu/monitoring/grafana/data"
+
+    - name: Ensure docker-compose is present
+      ansible.builtin.command: docker-compose --version
+      register: compose_check
+      ignore_errors: yes
+
+    - name: Pull and build images, then start containers
+      ansible.builtin.shell: docker-compose up -d --build
+
+    - name: Copy all files and folders from nagios-config to /home/ubuntu/monitoring/nagios/etc
+      copy:
+        src: ./nagios-config/
+        dest: /home/ubuntu/monitoring/nagios/etc/
+        owner: nagios
+        group: nagios
+        mode: '0775'
+    - name: Restart only nagios container
+      ansible.builtin.shell: docker-compose restart nagios
