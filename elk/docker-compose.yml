@@ -6,7 +6,7 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false # Disabled security for learning
       - xpack.security.http.ssl.enabled=false # Disabled security for learning
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m  # Limit memory
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g  # Limit memory
     ports:
       - "9200:9200"
     volumes:
@@ -32,9 +32,7 @@ services:
     ports:
       - "5601:5601"
     environment:
-    - ELASTICSEARCH_HOSTS=http://65.2.176.92:9200 #TO DO change domain as required
-    - ELASTICSEARCH_USERNAME=admin
-    - ELASTICSEARCH_PASSWORD=pass
+    - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     depends_on:
       - elasticsearch
 
