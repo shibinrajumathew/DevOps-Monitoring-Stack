@@ -1,6 +1,6 @@
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.4
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
@@ -17,7 +17,7 @@ services:
         hard: -1
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:8.12.0
+    image: docker.elastic.co/logstash/logstash:8.17.4
     container_name: logstash
     ports:
       - "5000:5000"
@@ -27,10 +27,14 @@ services:
       - elasticsearch
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.12.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.4
     container_name: kibana
     ports:
       - "5601:5601"
+    environment:
+    - ELASTICSEARCH_HOSTS=http://65.2.176.92:9200 #TO DO change domain as required
+    - ELASTICSEARCH_USERNAME=admin
+    - ELASTICSEARCH_PASSWORD=pass
     depends_on:
       - elasticsearch
 
