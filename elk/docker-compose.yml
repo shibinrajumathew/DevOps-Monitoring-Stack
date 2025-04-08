@@ -25,7 +25,6 @@ services:
       - "5000:5000"
     volumes:
       - ./logstash-pipeline:/usr/share/logstash/pipeline
-      - ./settings/logstash.yml:/usr/share/logstash/config/logstash.yml
     environment:
       - xpack.monitoring.elasticsearch.hosts=${LOGSTASH_MONITORING_HOSTS}
     depends_on:
