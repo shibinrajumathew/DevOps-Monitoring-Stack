@@ -5,7 +5,7 @@ This repository sets up a **DevOps Monitoring Stack** consisting of **Nagios**, 
 ## Stack Overview
 > **Nagios**: A monitoring tool that provides alerts and status reports for your systems, services, and network.
 > **Prometheus**: A powerful monitoring and alerting toolkit designed for cloud-native applications. It collects and stores time-series data, ideal for containerized environments.
-- **Grafana**: A data visualization platform that integrates with Prometheus to create dashboards and alerts based on your metrics data.
+> **Grafana**: A data visualization platform that integrates with Prometheus to create dashboards and alerts based on your metrics data.
 
 ## Setup Instructions
 
