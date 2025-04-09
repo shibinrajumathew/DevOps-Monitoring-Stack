@@ -3,8 +3,8 @@
 This repository sets up a **DevOps Monitoring Stack** consisting of **Nagios**, **Prometheus**, and **Grafana** using **Docker** containers, and is designed for seamless monitoring and alerting of your infrastructure and applications.
 
 ## Stack Overview
-- **Nagios**: A monitoring tool that provides alerts and status reports for your systems, services, and network.
-- **Prometheus**: A powerful monitoring and alerting toolkit designed for cloud-native applications. It collects and stores time-series data, ideal for containerized environments.
+> **Nagios**: A monitoring tool that provides alerts and status reports for your systems, services, and network.
+> **Prometheus**: A powerful monitoring and alerting toolkit designed for cloud-native applications. It collects and stores time-series data, ideal for containerized environments.
 - **Grafana**: A data visualization platform that integrates with Prometheus to create dashboards and alerts based on your metrics data.
 
 ## Setup Instructions
@@ -82,8 +82,7 @@ http://localhost:5601
 
 ## 🛠️ Future Enhancements
  - Add Logstash for log preprocessing (WIP).
- - Enable Security (TLS, auth) for production-ready configs.
-
-Integrate Beats (Filebeat for system logs).
+ - Enable Security (TLS, auth) for production-ready configs. 
+ - Integrate Beats (Filebeat for system logs).
 ### Contributions
 Feel free to fork the repository, create issues, and submit pull requests. Contributions to enhance the setup, add more monitoring configurations, or improve documentation are welcome!
