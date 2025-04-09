@@ -12,6 +12,17 @@ services:
       - "${ES_PORT}:9200"
     networks:
       - elastic
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.17.4
+    container_name: logstash
+    volumes:
+      - ./pipeline/:/usr/share/logstash/pipeline/
+    stdin_open: true
+    tty: true
+    ports:
+      - "${LOGSTASH_PORT}:5000"
+    networks:
+      - elastic
 
   kibana:
     image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
