@@ -1,47 +1,39 @@
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
     container_name: elasticsearch
     environment:
-      - discovery.type=${DISCOVERY_TYPE}
-      - xpack.security.enabled=${XPACK_SECURITY_ENABLED}
-      - xpack.security.http.ssl.enabled=${XPACK_SECURITY_SSL_ENABLED}
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - xpack.ml.use_auto_machine_memory_percent=${XPACK_ML_MEMORY_PERCENT}
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
       - ES_JAVA_OPTS=${ES_JAVA_OPTS}
-    ports:
-      - "9200:9200"
-    volumes:
-      - es_data:/usr/share/elasticsearch/data
     ulimits:
       memlock:
         soft: -1
         hard: -1
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
-    container_name: logstash
-    ports:
-      - "5000:5000"
+    mem_limit: ${ES_MEM_LIMIT}
     volumes:
-      - ./logstash-pipeline:/usr/share/logstash/pipeline
-    environment:
-      - xpack.monitoring.elasticsearch.hosts=${LOGSTASH_MONITORING_HOSTS}
-    depends_on:
-      - elasticsearch
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "${ES_PORT}:9200"
+    networks:
+      - elastic
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
     container_name: kibana
     ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_HOSTS=${KIBANA_ELASTICSEARCH_HOST}
-      - ELASTICSEARCH_USERNAME=${KIBANA_ELASTICSEARCH_USERNAME}
-      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
-      - KIBANA_PASSWORD=${KIBANA_PASSWORD}
+      - "${KIBANA_PORT}:5601"
+    networks:
+      - elastic
     depends_on:
       - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
 
 volumes:
-  es_data:
+  elasticsearch_data:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
