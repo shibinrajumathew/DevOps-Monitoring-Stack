@@ -53,5 +53,37 @@ Prometheus scrapes time-series metrics data and stores them for querying, visual
 
 Grafana integrates with Prometheus to create customized, interactive dashboards that provide insight into system health and performance.
 
+# ELK Stack - Local Development Setup 🚀
+
+**A lightweight Elasticsearch + Kibana Docker environment for log analysis testing and future production prototyping.**
+
+> 🔍 **Current Components**: Elasticsearch + Kibana  
+> ⏳ **Coming Later**: Logstash (for log ingestion pipelines)  
+
+## 🛠️ Purpose
+- **Local testing** of log aggregation, filtering, and visualization.
+- **Proof-of-Concept** for future production deployments.
+- **Security Analysis** (detect patterns like brute-force attacks, port scans).
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Docker & Docker Compose installed
+- 4GB+ RAM allocated to Docker (Elasticsearch is hungry!)
+
+### Elasticsearch	
+http://localhost:9200
+
+### Kibana	
+http://localhost:5601
+
+
+## 🛠️ Future Enhancements
+ - Add Logstash for log preprocessing (WIP).
+ - Enable Security (TLS, auth) for production-ready configs.
+
+Integrate Beats (Filebeat for system logs).
 ### Contributions
 Feel free to fork the repository, create issues, and submit pull requests. Contributions to enhance the setup, add more monitoring configurations, or improve documentation are welcome!
