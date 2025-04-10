@@ -35,6 +35,7 @@ services:
       - elasticsearch
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_PUBLICBASEURL=http://localhost:5601
       - xpack.security.enabled=false #Only for dev or test env
 
 volumes:
