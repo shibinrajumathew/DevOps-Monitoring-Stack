@@ -79,10 +79,24 @@ http://localhost:9200
 ### Kibana	
 http://localhost:5601
 
+### Logstash	
+http://localhost:5000
 
-## 🛠️ Future Enhancements
- - Add Logstash for log preprocessing (WIP).
- - Enable Security (TLS, auth) for production-ready configs. 
- - Integrate Beats (Filebeat for system logs).
+
+### Sample logstash body
+```bash
+{
+  "user": "username",
+  "event": {
+    "type": "operation name"
+  },
+  "url": {
+    "domain": "sampledomain.com",
+    "port": 5000,
+    "path": "/"
+  },
+  "message": "some original message version"
+}
+```
 ### Contributions
 Feel free to fork the repository, create issues, and submit pull requests. Contributions to enhance the setup, add more monitoring configurations, or improve documentation are welcome!
